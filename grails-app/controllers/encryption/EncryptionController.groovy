@@ -13,110 +13,16 @@ import java.nio.charset.StandardCharsets
 
 class EncryptionController {
 
-    def index() {}
-
-    def save() {
-        savePhotoToDisk(request.getFile('photo'))
-        print("Hereee----")
+    def index() {
+        render(view: "test")
 
 
     }
-
-    def savePhotoToDisk(def f)
-
-    {
-        println("Now heree----")
-        Constants constants = new Constants();
-        constants.PHOTOS_DIR = Holders.getGrailsApplication().getMainContext().getResource("/").getFile().getAbsolutePath();
-
-        def okContentTypes = ['image/png', 'image/jpeg', 'image/jpg']
-        if (f.empty) {
-            print("not empty")
-            flash.message = 'file cannot be empty'
-            return
-        }
-        if (!okContentTypes.contains(f.contentType)) {
-            print("type")
-
-            flash.message = "Image must be one of: $okContentTypes"
-            return
-        }
-        print("1------")
-        def extension = FilenameUtils.getExtension(f.originalFilename)
-
-        def serverImagesDir = new File(encryption.Constants.PHOTOS_DIR)
-        print(serverImagesDir);
-        Encryption encryption = new Encryption();
-        println("2----------")
-        if (serverImagesDir.exists()) {
-            println("photoooo---")
-            def fileName = "photo" + ".$extension"
-            File destinationFile = new File(serverImagesDir, fileName)
-
-            //  encryption.photoUrl = fileName
-
-            f.transferTo(destinationFile)
-            println("convert")
-
-            // read "any" type of image (in this case a png file)
-            BufferedImage image = ImageIO.read(new File("D:\\ImageEncryptionAndDecryption\\web-app\\photo.PNG"));
-            int height = image.getHeight();
-            int width = image.getWidth();
-            int pixel;
-//            int k=1;
-//            for (int i = 0; i < height; i++) {
-//                for (int j = 0; j < width; j++) {
-//                    System.out.println("x,y: " + j + ", " + i);
-//                    pixel = image.getRGB(j, i);
-//                    k++;
-//                    println(k)
-//
-//                    System.out.println("");
-//                    int alpha = (pixel >> 24) & 0xff;
-//                    int red = (pixel >> 16) & 0xff;
-//                    int green = (pixel >> 8) & 0xff;
-//                    int blue = (pixel) & 0xff;
-//                    println(alpha)
-//                    println(red)
-//                    println(green)
-//                    println(blue)
-//                    System.out.println("argb: " + alpha + ", " + red + ", " + green + ", " + blue);
-//                }
-//            }
+    def encrypt(){
 
 
-            Raster raster = image.getData();
-            int[][] pixels = new int[width][height];
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    pixels[x][y] = raster.getSample(x, y, 0);
 
 
-                }
-            }
-            print(pixels)
-
-//            return pixels;
-            redirect(action: XOR_Key())
-
-            // write it to byte array in-memory (jpg format)
-//            ByteArrayOutputStream b = new ByteArrayOutputStream();
-//            ImageIO.write(image, "png", b);
-//
-//            // do whatever with the array...
-//            byte[] jpgByteArray = b.toByteArray();
-//            println(jpgByteArray)
-//            // convert it to a String with 0s and 1s
-//            StringBuilder sb = new StringBuilder();
-//
-//            for (byte by : jpgByteArray)
-//                sb.append(Integer.toBinaryString(by & 0xFF));
-//
-//
-//            System.out.println(sb.toString());
-
-
-        }
 
     }
 
@@ -134,7 +40,7 @@ class EncryptionController {
             for (int j=0; j<4; j++){
                 print(key[i][j]);
             }
-            println();
+            println("----------");
         }
         println("AFTER ADD ROUND KEY");
         for (int i=0; i<4; i++){
@@ -147,13 +53,14 @@ class EncryptionController {
                 }
                 printf( array_afterroundkey[i][j]);
             }
-            printf("\n");
+            printf("---------");
         }
         substituteBytes(array_afterroundkey)
     }
 
     def substituteBytes(stateArray)
     {
+        println("-----------------")
         println("subbyte")
         for(int i=0;i<4;i++){
             for(int j=0;j<4;j++){
@@ -197,6 +104,7 @@ class EncryptionController {
     }
 
     def shiftRow(substituteArray){
+        println("ShiftRow-------")
         String[][] shiftRows = new String [4][4];
         for(int i;i<4;i++){
             for(int j; j<4;j++){
@@ -210,6 +118,7 @@ class EncryptionController {
     }
 
     def mixColumn(shiftRows){
+        println("MixColumn--------")
         String [][] mixColumn = new String [4][4];
         int  [][] gF = new  int[4][4];
         gF=[["2","3","1","1"],["1","2","3","1"],["1","1","2","3"],["3","1","1","2"]];
@@ -221,6 +130,7 @@ class EncryptionController {
             }
         }
         println(mixColumn)
+
 
 
     }
