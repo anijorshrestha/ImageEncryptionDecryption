@@ -24,7 +24,7 @@ class ImageController {
     def savePhotoToDisk(def f)
 
     {
-        byte[] k=new byte[16];
+        byte[] k = new byte[16];
         println("Now heree----")
         Constants constants = new Constants();
         constants.PHOTOS_DIR = Holders.getGrailsApplication().getMainContext().getResource("/").getFile().getAbsolutePath();
@@ -61,7 +61,7 @@ class ImageController {
             println("convert")
 
             // read "any" type of image (in this case a png file)
-            BufferedImage image = ImageIO.read(new File("D:\\ImageEncryptionAndDecryption\\web-app\\photo.jpg"));
+            BufferedImage image = ImageIO.read(new File(constants.PHOTOS_DIR  + "images\\photo.jpg"));
             int height = image.getHeight();
             int width = image.getWidth();
             int pixel;
@@ -77,37 +77,36 @@ class ImageController {
             byte[] b1 = new byte[0];
             println(jpgByteArray)
             println(b2);
-            for (int i = 0; i < b2.length; i++) {
-                b2[i] = b[i + 620];
-                b2= aes.encrypt(b2,k,10)
-                t=Math.round((AES.t2-AES.t1)/(1000000));
-                b1=new byte[b2.length+620];
-                for(int i=0; i<b1.length; i++) {
-                    if(i<620) b1[i]=b[i];
-                    else b1[i]=b2[i-620]; }
-                inputFile=new File(jFileChooser2.getSelectedFile()+"/encryptedimage.jpg");
-                FileOutputStream fos = new FileOutputStream(inputFile);
-                fos.write(b1);
-                fos.flush();
-                fos.close();
-                for(int i=0; i<b2.length; i++)
-                    b2[i]=b1[i+620];
-                if(jRadioButton2.isSelected()==true) b2=AES.decrypt(b2,k,4);
-                else b2=AES.decrypt(b2,k,10);
-                t=Math.round((AES.t2-AES.t1)/(1000000));
-                jTextField2.setText(String.valueOf(t)+"ms");
-                for(int i=0; i<b.length; i++) {
-                    if(i<620) b[i]=b1[i];
-                    else b[i]=b2[i-620]; }
-                inputFile=new File(jFileChooser2.getSelectedFile()+"/decryptedimage.jpg");
-                fos = new FileOutputStream(inputFile);
-                fos.write(b);
-                fos.flush();
-                fos.close();
+//            for (int i = 0; i < b2.length; i++) {
+//                b2[i] = b[i + 620];
+//                b2= aes.encrypt(b2,k,10)
+//                t=Math.round((AES.t2-AES.t1)/(1000000));
+//                b1=new byte[b2.length+620];
+//                for(int i=0; i<b1.length; i++) {
+//                    if(i<620) b1[i]=b[i];
+//                    else b1[i]=b2[i-620]; }
+//                inputFile=new File(jFileChooser2.getSelectedFile()+"/encryptedimage.jpg");
+//                FileOutputStream fos = new FileOutputStream(inputFile);
+//                fos.write(b1);
+//                fos.flush();
+//                fos.close();
+//                for(int i=0; i<b2.length; i++)
+//                    b2[i]=b1[i+620];
+//                if(jRadioButton2.isSelected()==true) b2=AES.decrypt(b2,k,4);
+//                else b2=AES.decrypt(b2,k,10);
+//                t=Math.round((AES.t2-AES.t1)/(1000000));
+//                jTextField2.setText(String.valueOf(t)+"ms");
+//                for(int i=0; i<b.length; i++) {
+//                    if(i<620) b[i]=b1[i];
+//                    else b[i]=b2[i-620]; }
+//                inputFile=new File(jFileChooser2.getSelectedFile()+"/decryptedimage.jpg");
+//                fos = new FileOutputStream(inputFile);
+//                fos.write(b);
+//                fos.flush();
+//                fos.close();
 
 
-
-            }
+//        }
 
             // println(jpgByteArray)
             // convert it to a String with 0s and 1s
