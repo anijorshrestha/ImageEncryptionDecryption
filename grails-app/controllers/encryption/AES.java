@@ -2,6 +2,9 @@ package encryption;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Created by anijor on 11/13/2016.
@@ -457,5 +460,27 @@ public class AES {
         tmp = deletePadding(tmp);
         t2=System.nanoTime();
         return tmp;
+    }
+
+    public static void saveEncryptImage(byte[] b1, String path) throws IOException {
+
+
+
+        File inputFile=new File(path+"encryptedimage.jpg");
+
+        FileOutputStream fos = new FileOutputStream(inputFile);
+        fos.write(b1);
+        fos.flush();
+        fos.close();
+    }
+    public static void saveDecryptImage(byte[] b, String path) throws IOException {
+
+
+        File inputFile=new File(path+"decryptedimage.jpg");
+
+        FileOutputStream fos = new FileOutputStream(inputFile);
+        fos.write(b);
+        fos.flush();
+        fos.close();
     }
 }

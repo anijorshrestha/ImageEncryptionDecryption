@@ -4,7 +4,6 @@ import org.apache.commons.io.FilenameUtils
 
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
-import java.awt.image.Raster
 
 class EncryptionController {
 
@@ -54,62 +53,35 @@ class EncryptionController {
             f.transferTo(destinationFile)
             println("convert")
 
-            // read "any" type of image (in this case a png file)
-            BufferedImage image = ImageIO.read(new File("D:\\ImageEncryptionAndDecryption\\web-app\\photo.PNG"));
-            int height = image.getHeight();
-            int width = image.getWidth();
-            int pixel;
-//            int k=1;
-//            for (int i = 0; i < height; i++) {
-//                for (int j = 0; j < width; j++) {
-//                    System.out.println("x,y: " + j + ", " + i);
-//                    pixel = image.getRGB(j, i);
-//                    k++;
-//                    println(k)
-//
-//                    System.out.println("");
-//                    int alpha = (pixel >> 24) & 0xff;
-//                    int red = (pixel >> 16) & 0xff;
-//                    int green = (pixel >> 8) & 0xff;
-//                    int blue = (pixel) & 0xff;
-//                    println(alpha)
-//                    println(red)
-//                    println(green)
-//                    println(blue)
-//                    System.out.println("argb: " + alpha + ", " + red + ", " + green + ", " + blue);
-//                }
-//            }
-
-
-            Raster raster = image.getData();
-            int[][] pixels = new int[width][height];
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    pixels[x][y] = raster.getSample(x, y, 0);
-
-
-                }
+            byte[] k=new byte[16];
+            try
+            {
+                k=AES.keygeneration();
             }
-            print(pixels)
+            catch (Exception e){
+                println "Problem in keyGeneration!!!!!!!!";
+            }
+            BufferedImage image = ImageIO.read(new File("C:\\Java_Projects\\AESAlgorithm\\web-app\\images\\springsource.PNG"));
+            String path = "C:\\Users\\Sushant\\Desktop\\"
+            ByteArrayOutputStream baos=new ByteArrayOutputStream();
+            ImageIO.write(image, "jpg", baos);
+            byte[] b = baos.toByteArray();
+            byte[] b2 = new byte[b.length-620];
+            byte[] b1 = new byte[0];
+            for(int i=0; i<(b2.length); i++)
+                b2[i]=b[i+620];
 
-//            return pixels;
-            redirect(action: XOR_Key())
+            b2=AES.encrypt(b2,k,10)
 
-            // write it to byte array in-memory (jpg format)
-//            ByteArrayOutputStream b = new ByteArrayOutputStream();
-//            ImageIO.write(image, "png", b);
-//
-//            // do whatever with the array...
-//            byte[] jpgByteArray = b.toByteArray();
-//            println(jpgByteArray)
-//            // convert it to a String with 0s and 1s
-//            StringBuilder sb = new StringBuilder();
-//
-//            for (byte by : jpgByteArray)
-//                sb.append(Integer.toBinaryString(by & 0xFF));
-//
-//
-//            System.out.println(sb.toString());
+            AES.saveEncryptImage(b2,b,path)
+
+            for(int i=0; i<b2.length; i++)
+                b2[i]=b1[i+620];
+
+            b2=AES.decrypt(b2,k,10)
+
+            AES.saveDecryptImage(b2,b1,b,path)
+
 
 
         }
