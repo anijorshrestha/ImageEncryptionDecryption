@@ -7,9 +7,6 @@ import org.apache.commons.io.FilenameUtils
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
 import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
-import java.util.logging.Level
-import java.util.logging.Logger
 
 class ImageController {
 
@@ -82,7 +79,7 @@ class ImageController {
 
 
             BufferedImage image = ImageIO.read(new File("C:\\Users\\\\Sushant\\Desktop\\images.jpg"));   //delete this one
-//            BufferedImage image = ImageIO.read(new File("C:\\Users\\\\Sushant\\Desktop\\images.jpg"));  Change hereeeeee your directory
+//            BufferedImage image = ImageIO.read(new File("C:\\Users\\\\Sushant\\Desktop\\images.jpg"));  Change hereeeeee your directory ok
             String path = "C:\\Users\\Sushant\\Desktop\\"
             ByteArrayOutputStream baos=new ByteArrayOutputStream();
             ImageIO.write(image, "jpg", baos);

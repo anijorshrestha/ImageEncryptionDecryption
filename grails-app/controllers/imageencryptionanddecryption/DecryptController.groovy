@@ -62,7 +62,7 @@ class DecryptController {
 //
             String path = "C:\\Users\\Sushant\\Desktop\\"
             File file = new File("C:\\Users\\Sushant\\Desktop\\mine.jpg");  //delete this
-//            File file = new File("C:\\Users\\Sushant\\Desktop\\mine.jpg");   give ur directory here
+//            File file = new File("C:\\Users\\Sushant\\Desktop\\mine.jpg");   give ur directory here okay
 
             FileInputStream lenthstream = new FileInputStream(file);
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
