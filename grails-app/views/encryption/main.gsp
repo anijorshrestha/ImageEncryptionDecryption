@@ -33,9 +33,28 @@
                         <td>
                             <input type="file"  name="photo"  id="photo"/>
                         </td>
+
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Input Key</label>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text"  name="user_key" />
+                        </td>
+
+
+                    </tr>
+                    <tr>
+                        <td>
                         <td>
                             <button>Save</button>
 
+                        </td>
                         </td>
                     </tr>
                 </table>

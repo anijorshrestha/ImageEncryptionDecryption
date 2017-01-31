@@ -6,6 +6,10 @@ import org.apache.commons.io.FilenameUtils
 
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
+import java.util.logging.Level
+import java.util.logging.Logger
 
 class ImageController {
 
@@ -57,7 +61,19 @@ class ImageController {
             byte[] k=new byte[16];
             try
             {
-                k=AES.keygeneration();
+//                k=AES.keygeneration();
+                println(params)
+                def key = params.user_key
+
+                //String text = "rojina";
+                MessageDigest msg = MessageDigest.getInstance("MD5");
+                msg.update(key.getBytes(), 0, key.length());
+                String digest1 = new BigInteger(1, msg.digest()).toString(16);
+                System.out.println("MD5: " + digest1.length());
+                System.out.println("MD5: " + digest1);
+
+                System.out.println("MD5: " + digest1.substring(0, 16));
+                k=digest1.substring(0, 16).bytes;
             }
             catch (Exception e){
                 println "Problem in keyGeneration!!!!!!!!";
@@ -74,16 +90,10 @@ class ImageController {
             byte[] b2 = new byte[b.length-620];
             byte[] b1 = new byte[0];
 
-            println "initialization"
-            println "b------------------->" + b.length
-            println "b1------------------>" + b1.length
-            println "b2------------------>" + b2.length
-
             for(int i=0; i<(b2.length); i++)
                 b2[i]=b[i+620];
-            println "----->>" + b2.length
+
             b2=AES.encrypt(b2,k,10)
-            println "<<<<<>>>>>" + b2.length
             b1=new byte[b2.length+620];
             for(int i=0; i<b1.length; i++) {
                 if(i<620) b1[i]=b[i];
