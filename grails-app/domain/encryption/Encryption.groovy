@@ -4,4 +4,5 @@ package encryption
  */
 class Encryption {
     String photoUrl
+    String key
 }

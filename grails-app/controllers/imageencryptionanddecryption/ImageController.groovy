@@ -9,6 +9,10 @@ import org.apache.commons.io.FilenameUtils
 
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
+import java.util.logging.Level
+import java.util.logging.Logger
 
 class ImageController {
 
@@ -17,6 +21,8 @@ class ImageController {
     def save() {
         savePhotoToDisk(request.getFile('photo'))
         print("Hereee----")
+
+
 
 
     }
@@ -45,9 +51,9 @@ class ImageController {
 
         def serverImagesDir = new File(encryption.Constants.PHOTOS_DIR)
         print(serverImagesDir);
-        Encryption encryption = new Encryption();
-        AES aes = new AES();
-        EncryptionController encryptionController = new EncryptionController();
+//        Encryption encryption = new Encryption();
+//        AES aes = new AES();
+       // EncryptionController encryptionController = new EncryptionController();
         println("2----------")
         if (serverImagesDir.exists()) {
             println("photoooo---")
@@ -63,8 +69,21 @@ class ImageController {
             byte[] k=new byte[16];
             try
             {
-                k=AES.keygeneration();
+//                k=AES.keygeneration();
+                println(params)
+                def key = params.user_key
+
+                //String text = "rojina";
+                MessageDigest msg = MessageDigest.getInstance("MD5");
+                msg.update(key.getBytes(), 0, key.length());
+                String digest1 = new BigInteger(1, msg.digest()).toString(16);
+                System.out.println("MD5: " + digest1.length());
+                System.out.println("MD5: " + digest1);
+
+                System.out.println("MD5: " + digest1.substring(0, 16));
+                k=digest1.substring(0, 16).bytes;
             }
+
             catch (Exception e){
                 println "Problem in keyGeneration!!!!!!!!";
             }
