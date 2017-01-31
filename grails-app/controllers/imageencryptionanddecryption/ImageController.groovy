@@ -1,9 +1,6 @@
 package imageencryptionanddecryption
-
 import encryption.AES
 import encryption.Constants
-import encryption.Encryption
-import encryption.EncryptionController
 import grails.util.Holders
 import org.apache.commons.io.FilenameUtils
 
@@ -45,9 +42,6 @@ class ImageController {
 
         def serverImagesDir = new File(encryption.Constants.PHOTOS_DIR)
         print(serverImagesDir);
-        Encryption encryption = new Encryption();
-        AES aes = new AES();
-        EncryptionController encryptionController = new EncryptionController();
         println("2----------")
         if (serverImagesDir.exists()) {
             println("photoooo---")
@@ -71,20 +65,25 @@ class ImageController {
 
 
 
-//            BufferedImage image = ImageIO.read(new File("C:\\Java_Projects\\AESAlgorithm\\web-app\\images\\springsource.PNG"));
-            BufferedImage image = ImageIO.read(new File("C:\\Users\\anijor\\Desktop\\B2DBy.jpg"));
-//            BufferedImage image = ImageIO.read(new File("C:\\Users\\anijor\\Desktop\\mine.jpg"));
-            String path = "C:\\Users\\anijor\\Desktop\\"
+            BufferedImage image = ImageIO.read(new File("C:\\Users\\\\Sushant\\Desktop\\images.jpg"));   //delete this one
+//            BufferedImage image = ImageIO.read(new File("C:\\Users\\\\Sushant\\Desktop\\images.jpg"));  Change hereeeeee your directory
+            String path = "C:\\Users\\Sushant\\Desktop\\"
             ByteArrayOutputStream baos=new ByteArrayOutputStream();
             ImageIO.write(image, "jpg", baos);
             byte[] b = baos.toByteArray();
             byte[] b2 = new byte[b.length-620];
             byte[] b1 = new byte[0];
 
+            println "initialization"
+            println "b------------------->" + b.length
+            println "b1------------------>" + b1.length
+            println "b2------------------>" + b2.length
+
             for(int i=0; i<(b2.length); i++)
                 b2[i]=b[i+620];
-
+            println "----->>" + b2.length
             b2=AES.encrypt(b2,k,10)
+            println "<<<<<>>>>>" + b2.length
             b1=new byte[b2.length+620];
             for(int i=0; i<b1.length; i++) {
                 if(i<620) b1[i]=b[i];
@@ -106,28 +105,24 @@ class ImageController {
             println "b1------------------>" + b1.length
             println "b2------------------>" + b2.length
 
-            for(int i=0; i<b2.length; i++)
-                b2[i]=b1[i+620];
-
-            b2=AES.decrypt(b2,k,10)
-            for(int i=0; i<b.length; i++) {
-                if(i<620) b[i]=b1[i];
-                else b[i]=b2[i-620]; }
-
-            inputFile=new File(path+"decryptedimage.jpg");
-            fos = new FileOutputStream(inputFile);
-            println "after decrypt"
-            println "b------------------->" + b.length
-            println "b1------------------>" + b1.length
-            println "b2------------------>" + b2.length
-            fos.write(b);
-            fos.flush();
-            fos.close();
-
-
-
-
-
+//            for(int i=0; i<b2.length; i++)
+//                b2[i]=b1[i+620];
+//
+//            b2=AES.decrypt(b2,k,10)
+//            for(int i=0; i<b.length; i++) {
+//                println b2.length + " ===== " + i
+//                if(i<620) b[i]=b1[i];
+//                else b[i]=b2[i-620]; }
+//
+//            inputFile=new File(path+"decryptedimage.jpg");
+//            fos = new FileOutputStream(inputFile);
+//            println "after decrypt"
+//            println "b------------------->" + b.length
+//            println "b1------------------>" + b1.length
+//            println "b2------------------>" + b2.length
+//            fos.write(b);
+//            fos.flush();
+//            fos.close();
         }
     }
 }
