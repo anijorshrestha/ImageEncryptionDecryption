@@ -347,6 +347,7 @@ public class AES {
         byte[] bloc = new byte[16];
 
 
+
         Nb = 4;
         Nk = key.length/4;
         Nr = Nk + 6;

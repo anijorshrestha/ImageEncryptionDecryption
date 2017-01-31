@@ -8,6 +8,10 @@ import grails.util.Holders
 import org.apache.commons.io.FilenameUtils
 
 import javax.imageio.ImageIO
+import javax.imageio.ImageReadParam
+import javax.imageio.ImageReader
+import javax.imageio.stream.ImageInputStream
+import java.awt.Image
 import java.awt.image.BufferedImage
 
 /**
@@ -29,9 +33,6 @@ class DecryptController {
         println("Now heree----")
         Constants constants = new Constants();
         constants.PHOTOS_DIR = Holders.getGrailsApplication().getMainContext().getResource("/").getFile().getAbsolutePath();
-        println f.originalFilename
-        println f.originalFilename.split("-",2)[1].toString().split("\\.",2)[0]
-        int length = f.originalFilename.split("-",2)[1].toString().split("\\.",2)[0].toString().toInteger();
 
         def okContentTypes = ['image/png', 'image/jpeg', 'image/jpg']
         if (f.empty) {
@@ -49,10 +50,6 @@ class DecryptController {
         def extension = FilenameUtils.getExtension(f.originalFilename)
 
         def serverImagesDir = new File(encryption.Constants.PHOTOS_DIR)
-        print(serverImagesDir);
-        Encryption encryption = new Encryption();
-        AES aes = new AES();
-        EncryptionController encryptionController = new EncryptionController();
         println("2----------")
         if (serverImagesDir.exists()) {
             println("photoooo---")
@@ -68,21 +65,34 @@ class DecryptController {
             byte[] k=new byte[16];
             try
             {
-                k=[-41, -28, 96, -23, -2, -72, 4, 7, -2, 109, 87, 38, 35, 46, 88, -72];
+                k=[-10, 49, 59, -60, 75, -82, 23, 7, 2, 40, 107, -106, -23, 100, -119, -32];
             }
             catch (Exception e){
                 println "Problem in keyGeneration!!!!!!!!";
             }
 
 //            BufferedImage image = ImageIO.read(new File("C:\\Java_Projects\\AESAlgorithm\\web-app\\images\\springsource.PNG"));
-            BufferedImage image = ImageIO.read(new File("C:\\Users\\anijor\\Desktop\\"+f.originalFilename));
+//            BufferedImage image = ImageIO.read(new File("C:\\Users\\anijor\\Desktop\\mine.jpg"));
             String path = "C:\\Users\\anijor\\Desktop\\"
-            ByteArrayOutputStream baos=new ByteArrayOutputStream();
-            ImageIO.write(image, "jpg", baos);
-            byte[] b1 = new byte[length];
-            b1 = baos.toByteArray();
-            byte[] b2 = new byte[b1.length-620];
-            byte[] b = new byte[b2.length+620];
+//            ByteArrayOutputStream baos=new ByteArrayOutputStream();
+//            ImageIO.write(image, "jpg", baos);
+            File file = new File("C:\\Users\\anijor\\Desktop\\mine.jpg");
+
+            FileInputStream lenthstream = new FileInputStream(file);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+            byte[] buf = new byte[lenthstream.bytes.length];
+
+            FileInputStream fis = new FileInputStream(file);
+            for (int readNum; (readNum = fis.read(buf)) != -1;) {
+                //Writes to this byte array output stream
+                bos.write(buf, 0, readNum);
+                System.out.println("read " + readNum + " bytes,");
+            }
+
+                byte[] b1 = bos.toByteArray();
+                byte[] b2 = new byte[b1.length - 620];
+                byte[] b = new byte[b2.length + 620];
 
 //            for(int i=0; i<(b2.length); i++)
 //                b2[i]=b[i+620];
@@ -93,43 +103,36 @@ class DecryptController {
 //                if(i<620) b1[i]=b[i];
 //                else b1[i]=b2[i-620]; }
 //
-            println "Before"
-            println "key == "+k
-            println "b------------------->" + b.length
-            println "b1------------------>" + b1.length
-            println "b2------------------>" + b2.length
-//            File inputFile
-//            inputFile=new File(path+"encryptedimage.jpg");
-//            FileOutputStream fos = new FileOutputStream(inputFile);
-//            fos.write(b1);
-//            fos.flush();
-//            fos.close();
-            println "After encryption"
-            println "b------------------->" + b.length
-            println "b1------------------>" + b1.length
-            println "b2------------------>" + b2.length
+                println "Before"
+                println "key == " + k
+                println "b------------------->" + b.length
+                println "b1------------------>" + b1.length
+                println "b2------------------>" + b2.length
 
-            for(int i=0; i<b2.length; i++)
-                b2[i]=b1[i+620];
-
-            b2=AES.decrypt(b2,k,10)
-            for(int i=0; i<b.length; i++) {
-                if(i<620) b[i]=b1[i];
-                else b[i]=b2[i-620];
-            }
-
-            File inputFile=new File(path+"decrypted123123123image.jpg");
-            FileOutputStream fos = new FileOutputStream(inputFile);
-            println "after decrypt"
-            println "b------------------->" + b.length
-            println "b1------------------>" + b1.length
-            println "b2------------------>" + b2.length
-            fos.write(b);
-            fos.flush();
-            fos.close();
-
-
-
+                for (int i = 0; i < b2.length; i++){
+                    println "b2.leh == = == = =" + b2.length
+                    b2[i] = b1[i + 620];
+                }
+                println "what the pop"
+                b2 = AES.decrypt(b2, k, 10)
+                println "what the pop 2<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>" + b2.length
+                for (int i = 0; i < b.length; i++) {
+                    println b2.length + "i = " + i
+                    if (i < 620)
+                        b[i] = b1[i];
+                    else
+                        b[i] = b2[i-620];
+                }
+                println "nope what the pop 3"
+                File inputFile = new File(path + "decrypted123123123image.jpg");
+                FileOutputStream fos = new FileOutputStream(inputFile);
+                println "after decrypt"
+                println "b------------------->" + b.length
+                println "b1------------------>" + b1.length
+                println "b2------------------>" + b2.length
+                fos.write(b);
+                fos.flush();
+                fos.close();
 
 
         }

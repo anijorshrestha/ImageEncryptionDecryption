@@ -69,6 +69,8 @@ class ImageController {
                 println "Problem in keyGeneration!!!!!!!!";
             }
 
+
+
 //            BufferedImage image = ImageIO.read(new File("C:\\Java_Projects\\AESAlgorithm\\web-app\\images\\springsource.PNG"));
             BufferedImage image = ImageIO.read(new File("C:\\Users\\anijor\\Desktop\\B2DBy.jpg"));
 //            BufferedImage image = ImageIO.read(new File("C:\\Users\\anijor\\Desktop\\mine.jpg"));
