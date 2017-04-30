@@ -16,55 +16,33 @@
 <div class="jumbotron head">
     <h1 class="text-center">Image Encryption and Decryption</h1>
 </div>
+
 <div class="container-fluid">
 
     <div class="login-page">
 
-        <g:form controller="image" action="save" enctype="multipart/form-data">
-            <div>
-                <table>
-                    <tr>
-                        <td>
-                            <label>Choose Image to Encrypt</label>
-                        </td>
+            <g:form class="form" controller="image" enctype="multipart/form-data">
 
-                    </tr>
-                    <tr>
-                        <td>
-                            <input type="file"  name="photo"  id="photo"/>
-                        </td>
+                <legend><h3>Image to Encrypt or Decrypt</h3></legend>
+
+                <input class="form-group" type="file" name="photo" id="photo"/>
+
+                <div class="form-group">
+                    <label><h3>Input Key</h3></label>
+                    <input class="form-control" type="text" name="user_key"/>
+
+                </div>
 
 
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Input Key</label>
-                        </td>
-
-                    </tr>
-                    <tr>
-                        <td>
-                            <input type="text"  name="user_key" />
-                        </td>
+                <g:actionSubmit class="btn btn-danger" value="Encrypt" action="save"/>
 
 
-                    </tr>
-                    <tr>
-                        <td>
-                        <td>
-                            <button>Save</button>
+                <g:actionSubmit class="btn btn-danger" value="Decrypt" action="saveD"/>
 
-                        </td>
-                        </td>
-                    </tr>
-                </table>
+            </g:form>
+        </div>
 
 
-
-            </div>
-
-        </g:form>
-    </div>
 
 </div>
 
