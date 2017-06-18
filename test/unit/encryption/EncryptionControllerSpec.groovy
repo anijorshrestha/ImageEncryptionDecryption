@@ -1,6 +1,7 @@
 package encryption
 
 import grails.test.mixin.TestFor
+import imageencryptionanddecryption.EncryptionController
 import spock.lang.Specification
 
 /**
