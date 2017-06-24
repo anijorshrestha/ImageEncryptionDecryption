@@ -99,12 +99,18 @@ class ImageController {
             for (int i = 0; i < (height); i++) {
 
                 for (int j = 0; j < (width); j++) {
-
+//                    DataBuffer dataBuffer = image.getRaster().getDataBuffer();
+//                    int grayLevel = dataBuffer.getElem(i * image.getWidth() + j);
 //
+//                    pixel[i][j] = grayLevel * 1.0;
+
+////
                     int rgb = image.getRGB(i, j);
                     int r = (rgb >> 16) & 0xFF;
                     int g = (rgb >> 8) & 0xFF;
                     int b = (rgb & 0xFF);
+
+                    println("r-"+r+"g-"+g+"b-"+b);
                     pixel[i][j] = (r + g + b) / 3;
 
                 }
