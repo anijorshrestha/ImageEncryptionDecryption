@@ -1,7 +1,7 @@
 package imageencryptionanddecryption
 import encryption.AES
 import encryption.Constants
-import encryption.RSA
+import encryption.RSA_Algo
 import grails.util.Holders
 import org.apache.commons.io.FilenameUtils
 
@@ -150,7 +150,7 @@ class ImageController {
 
                 // byte[] b = baos.toByteArray();
                 //  println("original---"+b.length);
-                RSA rsa = new RSA();
+            RSA_Algo rsa = new RSA_Algo();
 
 //           // println(Arrays.toString(b));
 //        String [][]test=rsa.intToString(pixel[0])
