@@ -11,9 +11,9 @@ public class DataTypeConverter {
     private static String[] strings;
     private static byte[] bytes;
 
-    public static byte[] bigToByteValue(BigInteger[] bigIntegersII){
-        bytes = new byte[bigIntegersII.length];
-        for(int i = 0 ;  i < bigIntegersII.length; i ++){
+    public static byte[] bigToByteValue(BigInteger[] bigIntegersII, int array_Size){
+        bytes = new byte[array_Size];
+        for(int i = 0 ;  i < array_Size; i ++){
             bytes[i] = bigIntegersII[i].byteValue();
         }
         return bytes;

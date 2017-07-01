@@ -36,13 +36,19 @@ class ImageController {
         if (serverImagesDir.exists()) {
             File destinationFile = new File(serverImagesDir, f.originalFilename)
             f.transferTo(destinationFile)
+
+
+            ///////////////////////////////////   Reading Image   //////////////////////////////////////////////////
             BufferedImage image = ImageIO.read(new File(image_path));
-            String path = "C:\\Users\\Sushant\\Desktop";          //////Change your here
+            String path = "/home/rojina/Desktop";      //////Change your here
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(image, "jpg", baos);
             int width = image.getWidth();
             int height = image.getHeight();
             int[][] pixel = new int[width][height];
+
+
+            ////////////////////////////////////  Changing to GrayScaleImage  /////////////////////////////////////
             for (int i = 0; i < (height); i++) {
                 for (int j = 0; j < (width); j++) {
                     int rgb = image.getRGB(i, j);
@@ -66,25 +72,36 @@ class ImageController {
             for (int i = 0; i < single_array.length; i++) {
                 arra[i] = String.valueOf(single_array[i]);
             }
+
+
+
+            /////////////////////////////////////////// Encrypting and decrypting ////////////////////////////////////////////
             RSA_Algorithm rsa = new RSA_Algorithm();
 
 
+            //////////////////////////////////////////////   Encryption     ///////////////////////////////////////////////
             BigInteger[] encrypted_BigInt = rsa.encrypt(arra,array_size);
 
-            byte[] encrypted_byte = DataTypeConverter.bigToByteValue(encrypted_BigInt);
+            byte[] encrypted_byte = DataTypeConverter.bigToByteValue(encrypted_BigInt, array_size);
 
             File inputFile
             String name
-            inputFile = new File(path + name + "-----encryptedimagersa.jpg");
+
+//            --------------- Writing on a file
             FileOutputStream fos = new FileOutputStream(inputFile);
             fos.write(encrypted_byte);
             fos.flush();
             fos.close();
 
+
+            ////////////////////////////////////////    Decryption  //////////////////////////////////////////////
+
             BigInteger[] decrypted_BigInt = rsa.decrypt(encrypted_BigInt, array_size);
 
-            byte[] decrypted_byte = DataTypeConverter.bigToByteValue(decrypted_BigInt);
+            byte[] decrypted_byte = DataTypeConverter.bigToByteValue(decrypted_BigInt, array_size);
 
+//            --------------- Writing on a file
+            inputFile = new File(path + name + "-----encryptedimagersa.jpg");
             inputFile = new File(path + name + "-----decryptedimagersa.jpg");
             fos = new FileOutputStream(inputFile);
             fos.write(decrypted_byte);
