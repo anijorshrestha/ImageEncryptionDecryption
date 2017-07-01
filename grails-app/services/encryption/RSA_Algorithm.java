@@ -27,6 +27,7 @@ public class RSA_Algorithm
     private Random     r;
 
     private static BigInteger []array= new BigInteger[5625];
+    private static BigInteger []darray= new BigInteger[5625];
     private  static int[] final_array = new int[5625];
 
 
@@ -178,28 +179,99 @@ public class RSA_Algorithm
             //System.out.println(bigInteger);
             array[i]=bigInteger.modPow(e, N);
             //
-            // System.out.println("enc----"+array[i]);
+             System.out.println("or--"+message[i]+"enc----"+array[i]);
 
         }
         ;
 
+
         for (int i = 0; i <array.length ; i++) {
             //BigInteger bigInteger=new BigInteger(arra[i]);
-            array[i]=array[i].modPow(d,N);
+            darray[i]=array[i].modPow(d,N);
             //System.out.println("denc----"+array[i]);
         }
 
         for (int i = 0; i <arrayLength ; i++) {
-            System.out.println("original--"+message[i]+"decrypted--"+array[i]);
+         //   System.out.println("original--"+message[i]+"decrypted--"+darray[i]);
 
         }
 
         for (int i = 0; i <arrayLength ; i++) {
 
-            final_array[i]=array[i].intValue();
-            System.out.println("original--"+message[i]+"decrypted--"+array[i]+"dec int--"+final_array[i]);
+            final_array[i]=darray[i].intValue();
+          //  System.out.println("original--"+message[i]+"decrypted--"+darray[i]+"dec int--"+final_array[i]);
+
+
 
         }
+//
+        double r,nr=0,dr_1=0,dr_2=0,dr_3=0,dr=0;
+        double xx[],xy[],yy[];
+        xx =new double[arrayLength];
+        xy =new double[arrayLength];
+        yy =new double[arrayLength];
+        double x[]=new double[arrayLength];
+        double y[]=new double[arrayLength];
+        for (int i = 0; i <arrayLength ; i++) {
+            x[i]=Integer.parseInt(message[i]);
+        }
+        for (int i = 0; i < arrayLength; i++) {
+         y[i]=array[i].intValue();
+        }
+        for (int i = 0; i <arrayLength ; i++) {
+            System.out.println("org:"+x[i]+"enc:"+y[i]);
+        }
+
+        double sum_y=0,sum_yy=0,sum_xy=0,sum_x=0,sum_xx=0;
+        int i,n=arrayLength;
+        for(i=0;i<n;i++)
+        {
+            xx[i]=x[i]*x[i];
+            yy[i]=y[i]*y[i];
+        }
+        for(i=0;i<n;i++)
+        {
+            sum_x+=x[i];
+            sum_y+=y[i];
+            sum_xx+= xx[i];
+            sum_yy+=yy[i];
+            sum_xy+= x[i]*y[i];
+        }
+        nr=(n*sum_xy)-(sum_x*sum_y);
+        double sum_x2=sum_x*sum_x;
+        double sum_y2=sum_y*sum_y;
+        dr_1=(n*sum_xx)-sum_x2;
+        dr_2=(n*sum_yy)-sum_y2;
+        dr_3=dr_1*dr_2;
+        dr=Math.sqrt(dr_3);
+        r=(nr/dr);
+        String s = String.format("%.2f",r);
+        r = Double.parseDouble(s);
+        System.out.println("Total Numbers:"+n+"\nCorrelation Coefficient:"+r);
+        double count=0;
+        for (int j = 0; j <arrayLength ; j++) {
+            if (x[j]!=y[j]){
+                count++;
+            }
+        }
+        System.out.println(count);
+        System.out.println(arrayLength);
+        double np= (count/arrayLength);
+        System.out.println(np);
+        double npr=np*100;
+        System.out.println(npr);
+        double ans=0;
+        for (int j = 0; j <arrayLength ; j++) {
+
+            ans=ans+(Math.abs(x[j]-y[j]));
+            System.out.println(ans);
+
+        }
+        System.out.println(ans);
+        double uaci=(ans/5625);
+        System.out.println("uaci"+uaci);
+
+
 
 //
 //        BufferedImage b = new BufferedImage(75, 75, BufferedImage.TYPE_BYTE_GRAY);
@@ -229,6 +301,7 @@ public class RSA_Algorithm
 
         return "test" ;
     }
+
 
 
 
