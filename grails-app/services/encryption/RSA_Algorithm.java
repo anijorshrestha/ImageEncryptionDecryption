@@ -1,6 +1,10 @@
 package encryption;
 
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Random;
@@ -11,6 +15,9 @@ public class RSA_Algorithm
 {
 
     private static BigInteger p;
+
+    private static int image_widht;
+    private static int image_height;
 
     private static BigInteger q;
 
@@ -28,7 +35,8 @@ public class RSA_Algorithm
 
     private static BigInteger []array= new BigInteger[5625];
     private static BigInteger []darray= new BigInteger[5625];
-    private  static int[] final_array = new int[5625];
+    private  static int[] encrypted_integer_array = new int[5625];
+    private  static int[] decrypted_integer_array = new int[5625];
 
 
 
@@ -63,12 +71,10 @@ public class RSA_Algorithm
         for (int i = 0; i <arrayLength ; i++) {
             BigInteger bigInteger=new BigInteger(message[i]);
             array[i]=bigInteger.modPow(e, N);
+            encrypted_integer_array[i] = array[i].intValue();
         }
-//        for (int i = 0; i <arrayLength ; i++) {
-//            final_array[i]=darray[i].intValue();
-//
-//        }
-        return darray;
+        writeImageInFolder(encrypted_integer_array,"Encrypted");
+        return array;
     }
 
     protected Double getCorrelation(int arrayLength, String[] original_value){
@@ -210,47 +216,35 @@ public class RSA_Algorithm
         return uaci ;
     }
 
-    public BigInteger[] decrypt(String[] message, int arrayLength) throws IOException{
+    public BigInteger[] decrypt() throws IOException{
         darray = new BigInteger[5625];
 
         for (int i = 0; i <array.length ; i++) {
             darray[i]=array[i].modPow(d, N);
+            decrypted_integer_array[i] = darray[i].intValue();
         }
+        writeImageInFolder(decrypted_integer_array, "Decrypted");
         return darray;
     }
 
+    public void writeImageInFolder(int[] inputArray, String name) throws IOException {
+        BufferedImage img = new BufferedImage(image_widht, image_height, BufferedImage.TYPE_INT_RGB);
+        int i = 0;
+        for (int y = 0; y < image_height ; y++) {           //++i and i++
+            for (int x = 0; x < image_widht; x++) {
+                int rgb=inputArray[i++];
+                img.setRGB(x, y, rgb);
+            }
+        }
 
+        File outputFile = new File("/home/rojina/Desktop/RSA-Algorithm"+name);
+        ImageIO.write(img, "jpg", outputFile);
 
-    // Decrypt message
+    }
 
-//    public static byte[] decrypt(byte[] message)
-//
-//    {
-//        System.out.println("e---------2"+e);
-//        System.out.println("d--------2"+d);
-//        return (new BigInteger(message)).modPow(d, N).toByteArray();
-//
-//    }
-
-//    private static String[][] intToString(int[][] encrypted)
-//
-//    {
-//        System.out.println(encrypted);
-//
-//        String[][] test= new String[75][75];
-//
-//        for(int i = 0; i < 75; i++){
-//
-//            for(int j = 0; j < 75; j++) {
-//
-//                test[i][j]= String.valueOf(encrypted[i][j]);
-//            }
-//
-//            }
-//        System.out.println(test);
-//
-//        return test;
-//
-//    }
+    public void setImage(int width, int height){
+        this.image_widht = width;
+        this.image_height = height;
+    }
 }
 

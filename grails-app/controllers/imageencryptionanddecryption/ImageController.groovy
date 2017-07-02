@@ -45,7 +45,7 @@ class ImageController {
             ImageIO.write(image, "jpg", baos);
             int width = image.getWidth();
             int height = image.getHeight();
-            int[][] pixel = new int[width][height];
+            int[][] pixel = new int[height][width];
 
 
             ////////////////////////////////////  Changing to GrayScaleImage  /////////////////////////////////////
@@ -62,12 +62,11 @@ class ImageController {
             int array_size = height * width;
             int[] single_array = new int[array_size];
             int position = 0;
-            for (int i = 0; i < (width); i++) {
-                for (int j = 0; j < (height); j++) {
+            for (int i = 0; i < (height); i++) {
+                for (int j = 0; j < (width); j++) {
                     single_array[position++] = pixel[i][j];
                 }
             }
-            println(single_array.length);
             String[] arra = new String[array_size];
             for (int i = 0; i < single_array.length; i++) {
                 arra[i] = String.valueOf(single_array[i]);
@@ -77,38 +76,17 @@ class ImageController {
 
             /////////////////////////////////////////// Encrypting and decrypting ////////////////////////////////////////////
             RSA_Algorithm rsa = new RSA_Algorithm();
+            rsa.setImage(width, height)
 
 
             //////////////////////////////////////////////   Encryption     ///////////////////////////////////////////////
             BigInteger[] encrypted_BigInt = rsa.encrypt(arra,array_size);
 
-            byte[] encrypted_byte = DataTypeConverter.bigToByteValue(encrypted_BigInt, array_size);
-
-            File inputFile
-            String name
-
-//            --------------- Writing on a file
-            FileOutputStream fos = new FileOutputStream(inputFile);
-            fos.write(encrypted_byte);
-            fos.flush();
-            fos.close();
-
-
             ////////////////////////////////////////    Decryption  //////////////////////////////////////////////
 
-            BigInteger[] decrypted_BigInt = rsa.decrypt(encrypted_BigInt, array_size);
+            BigInteger[] decrypted_BigInt = rsa.decrypt();
 
-            byte[] decrypted_byte = DataTypeConverter.bigToByteValue(decrypted_BigInt, array_size);
-
-//            --------------- Writing on a file
-            inputFile = new File(path + name + "-----encryptedimagersa.jpg");
-            inputFile = new File(path + name + "-----decryptedimagersa.jpg");
-            fos = new FileOutputStream(inputFile);
-            fos.write(decrypted_byte);
-            fos.flush();
-            fos.close();
-
-            Double correlation = rsa.getCorrelation(array_size)
+//            Double correlation = rsa.getCorrelation(array_size)
 
         }
     }
