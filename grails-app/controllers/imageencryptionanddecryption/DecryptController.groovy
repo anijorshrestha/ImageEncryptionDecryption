@@ -113,6 +113,7 @@ class DecryptController {
                 b2[i] = b[i + 620];
 
             b2 = AES.encrypt(b2, k, 10)
+
             b1 = new byte[b2.length + 620];
             for (int i = 0; i < b1.length; i++) {
                 if (i < 620) b1[i] = b[i];
@@ -263,9 +264,10 @@ class DecryptController {
             double npr= (count/array_sizes)* 100;
             System.out.println(npr);
             double ans=0
+
             for (int j = 0; j <array_sizes ; j++) {
 
-                ans=ans+(Math.abs(x[j]-y[j]));
+                ans=ans+((Math.abs(x[j]-y[j]))/255);
                 System.out.println(ans);
 
             }

@@ -80,13 +80,14 @@ class ImageController {
 
 
             //////////////////////////////////////////////   Encryption     ///////////////////////////////////////////////
-            BigInteger[] encrypted_BigInt = rsa.encrypt(arra,array_size);
+            def encrypted_BigInt = rsa.encrypt(arra,array_size);
 
             ////////////////////////////////////////    Decryption  //////////////////////////////////////////////
 
-            BigInteger[] decrypted_BigInt = rsa.decrypt();
+            def decrypted_BigInt = rsa.decrypt();
 
-//            Double correlation = rsa.getCorrelation(array_size)
+//            encrypted_BigInt.un
+
 
         }
     }
