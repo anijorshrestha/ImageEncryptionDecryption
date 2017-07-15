@@ -1,6 +1,5 @@
 package imageencryptionanddecryption
 import encryption.Constants
-import encryption.DataTypeConverter
 import encryption.RSA_Algorithm
 import grails.util.Holders
 import org.apache.commons.io.FilenameUtils
@@ -40,22 +39,25 @@ class ImageController {
 
             ///////////////////////////////////   Reading Image   //////////////////////////////////////////////////
             BufferedImage image = ImageIO.read(new File(image_path));
-            String path = "/home/rojina/Desktop";      //////Change your here
+            String path = "C:/Users/Sushant/Desktop/encryptionandde/";      //////Change your here
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(image, "jpg", baos);
             int width = image.getWidth();
             int height = image.getHeight();
             int[][] pixel = new int[height][width];
 
-
             ////////////////////////////////////  Changing to GrayScaleImage  /////////////////////////////////////
             for (int i = 0; i < (height); i++) {
                 for (int j = 0; j < (width); j++) {
                     int rgb = image.getRGB(i, j);
                     int r = (rgb >> 16) & 0xFF;
+//                    println "r = $r"
                     int g = (rgb >> 8) & 0xFF;
+//                    println "g = $g"
                     int b = (rgb & 0xFF);
+//                    println "b = $b"
                     pixel[i][j] = (r + g + b) / 3;
+//                    pixel[i][j] = (r + g + b) / 3;
                 }
             }
             println(pixel.length);

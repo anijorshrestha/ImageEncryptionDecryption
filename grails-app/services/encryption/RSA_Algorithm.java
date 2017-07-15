@@ -3,7 +3,6 @@ package encryption;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -178,16 +177,20 @@ public class RSA_Algorithm
     }
 
     public void writeImageInFolder(int[] inputArray, String name) throws IOException {
-        BufferedImage img = new BufferedImage(image_widht, image_height, BufferedImage.TYPE_INT_RGB);
+        BufferedImage img = new BufferedImage(image_widht, image_height, BufferedImage.TYPE_CUSTOM);
         int i = 0;
-        for (int y = 0; y < image_height ; y++) {           //++i and i++
-            for (int x = 0; x < image_widht; x++) {
-                int rgb=inputArray[i++];
+        for (int x = 0; x < image_height ; x++) {           //++i and i++
+            for (int y = 0; y < image_widht; y++) {
+//                int rgb=inputArray[i++] ;
+//                int rgb=inputArray[i++] ;  (rgb >> 8) & 0xFF
+                int rgb= ((inputArray[i] << 16) & 0xFF) + ((inputArray[i] << 8) & 0xFF) + (inputArray[i++] & 0xFF) ;
+//                rgb /= 3;
+                System.out.println("rgb = " + rgb);
                 img.setRGB(x, y, rgb);
             }
         }
 
-        File outputFile = new File("/home/rojina/Desktop/RSA-Algorithm"+name);
+        File outputFile = new File("C:/Users/Sushant/Desktop/encryptionandde/RSA-Algorithm-"+name);
         ImageIO.write(img, "jpg", outputFile);
 
     }
