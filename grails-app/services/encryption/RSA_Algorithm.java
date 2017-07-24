@@ -177,16 +177,19 @@ public class RSA_Algorithm
     }
 
     public void writeImageInFolder(int[] inputArray, String name) throws IOException {
-        BufferedImage img = new BufferedImage(image_widht, image_height, BufferedImage.TYPE_CUSTOM);
+        BufferedImage img = new BufferedImage(image_widht, image_height, BufferedImage.TYPE_INT_BGR);
         int i = 0;
+        System.out.println("From");
         for (int x = 0; x < image_height ; x++) {           //++i and i++
             for (int y = 0; y < image_widht; y++) {
 //                int rgb=inputArray[i++] ;
 //                int rgb=inputArray[i++] ;  (rgb >> 8) & 0xFF
-                int rgb= ((inputArray[i] << 16) & 0xFF) + ((inputArray[i] << 8) & 0xFF) + (inputArray[i++] & 0xFF) ;
+                int rgb= ((inputArray[i] << 16) | 0xFF) + ((inputArray[i] << 8) | 0xFF) + (inputArray[i] | 0xFF) ;
 //                rgb /= 3;
-                System.out.println("rgb = " + rgb);
+                System.out.println(inputArray[i++] + " ==== rgb = " + rgb);
+//                System.out.println(inputArray[i] + " ==== rgb = " + rgb);
                 img.setRGB(x, y, rgb);
+//                img.setRGB(x, y, inputArray[i++]);
             }
         }
 
