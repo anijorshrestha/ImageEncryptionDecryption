@@ -14,8 +14,24 @@
 
 <div class="container-fluid">
 
-    <div class="login-page" style="text-align: -webkit-center;" >
-       <h3> Successfully Decrypted !!!</h3>
+    <div class="login-page col-lg-6" style="text-align: -webkit-center;" >
+
+
+        <img src="${resource(dir:"images", file: "ag.jpg") }">
+        <label >NPCR</label>
+        <input type="text" value="123" readonly disabled>
+        <label >Correlation Coefficient</label>
+        <input type="text" value="123" readonly disabled>
+
+
+    </div>
+    <div class="login-page col-lg-6" style="text-align: -webkit-center;" >
+        <img src="${resource(dir:"images", file: "ag.jpg") }">
+        <label >NPCR</label>
+        <input type="text" value="123" readonly>
+        <label >Correlation Coefficient</label>
+        <input type="text" value="123" readonly>
+
 
     </div>
 </div>

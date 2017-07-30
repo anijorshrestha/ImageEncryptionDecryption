@@ -14,8 +14,30 @@
 <div class="container-fluid">
 
     <div class="login-page"    style="text-align: -webkit-center;" >
+        <div class="col-lg-12">
+            <h2>Comparion between AES and RSA</h2>
+        </div>
 
-       <h3> Successfully Encrypted !!!</h3>
+        <div class="login-page col-lg-6" style="text-align: -webkit-center;" >
+            <h2>AES</h2>
+            <g:img dir="images" file="ag.jpg" />
+            <br>
+            <label >NPCR</label><br>
+            <input type="text" value="123" readonly><br>
+            <label >Correlation Coefficient</label><br>
+            <input type="text" value="123" readonly>
+
+        </div>
+        <div class="login-page col-lg-6" style="text-align: -webkit-center;" >
+            <h2>RSA</h2>
+            <img src="${resource(dir:"images", file: "ag.jpg") }">
+            <br>
+            <label >NPCR</label><br>
+            <input type="text" value="123" disabled><br>
+            <label >Correlation Coefficient</label><br>
+            <input type="text" value="123" disabled>
+
+        </div>
 
 
     </div>
