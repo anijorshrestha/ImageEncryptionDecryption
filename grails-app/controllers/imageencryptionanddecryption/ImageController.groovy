@@ -1,4 +1,7 @@
 package imageencryptionanddecryption
+
+import encryption.AES
+import encryption.AES_Modifier
 import encryption.Constants
 import encryption.RSA_Algorithm
 import grails.util.Holders
@@ -6,18 +9,21 @@ import org.apache.commons.io.FilenameUtils
 
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
+import java.security.MessageDigest
 
 class ImageController {
+    def rsa_map, aes_map
     def index() {}
     def renderFinalView = {
         redirect(controller: "encryption", action: "renderFinalView")
     }
     def save() {
-        savePhotoToDisk(request.getFile('photo'))
+        savePhotoToDisk(request.getFile('photo'),params.user_key)
         print("Hereee----")
     }
-    def savePhotoToDisk(def f)
+    def savePhotoToDisk(def f, String user_key)
     {
+        String photoPath = "C:/Users/Sushant/Desktop/encryptionandde/"
         Constants constants = new Constants();
         constants.PHOTOS_DIR = Holders.getGrailsApplication().getMainContext().getResource("/").getFile().getAbsolutePath();
         def okContentTypes = ['image/png', 'image/jpeg', 'image/jpg']
@@ -31,7 +37,7 @@ class ImageController {
         }
         def extension = FilenameUtils.getExtension(f.originalFilename)
         def serverImagesDir = new File(encryption.Constants.PHOTOS_DIR)
-        String image_path = serverImagesDir.absolutePath + "/" + f.originalFilename
+        String image_path = serverImagesDir.absolutePath + "\\" + f.originalFilename
         if (serverImagesDir.exists()) {
             File destinationFile = new File(serverImagesDir, f.originalFilename)
             f.transferTo(destinationFile)
@@ -39,7 +45,7 @@ class ImageController {
 
             ///////////////////////////////////   Reading Image   //////////////////////////////////////////////////
             BufferedImage image = ImageIO.read(new File(image_path));
-            String path = "C:/Users/Sushant/Desktop/encryptionandde/";      //////Change your here
+            String path = serverImagesDir.absolutePath +"\\images\\"
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(image, "jpg", baos);
             int width = image.getWidth();
@@ -73,24 +79,111 @@ class ImageController {
             for (int i = 0; i < single_array.length; i++) {
                 arra[i] = String.valueOf(single_array[i]);
             }
+            rsa_map = rsaPart(arra, height, width, path)
+            println "user_key ======================== $user_key"
+            aes_map = aESpart(baos,path+"AES-Algorithm-", arra, user_key)
 
-
-
-            /////////////////////////////////////////// Encrypting and decrypting ////////////////////////////////////////////
-            RSA_Algorithm rsa = new RSA_Algorithm();
-            rsa.setImage(width, height)
-
-
-            //////////////////////////////////////////////   Encryption     ///////////////////////////////////////////////
-            def encrypted_BigInt = rsa.encrypt(arra,array_size);
-
-            ////////////////////////////////////////    Decryption  //////////////////////////////////////////////
-
-            def decrypted_BigInt = rsa.decrypt();
-
-//            encrypted_BigInt.un
-
+            println "aes_correlation ==== " + aes_map.get("aes_correlation")
+            println " aes_npr ==== " + aes_map.get("aes_npr")
+            println " rsa_correlation ==== " + rsa_map.get("rsa_correlation")
+            println "rsa_npr ==== " + rsa_map.get("rsa_npr")
+//            double uaci = AES_Modifier.getCorrelation(path)
+//            println "uaci ====================================== $uaci"
 
         }
+        String original_photoPath = photoPath+extension
+        render(view: "save", model: [aes_map: aes_map, rsa_map: rsa_map, original_photo:extension])
+    }
+
+    def rsaPart(String[] arra, int height, int width, String path){
+
+
+
+
+        /////////////////////////////////////////// Encrypting and decrypting ////////////////////////////////////////////
+        RSA_Algorithm rsa = new RSA_Algorithm();
+        rsa.setImage(width, height)
+        rsa.setArray()
+        rsa.setPath(path)
+
+
+        //////////////////////////////////////////////   Encryption     ///////////////////////////////////////////////
+        def encrypted_BigInt = rsa.encrypt(arra,height*width);
+
+        ////////////////////////////////////////    Decryption  //////////////////////////////////////////////
+
+        def decrypted_BigInt = rsa.decrypt();
+
+//            encrypted_BigInt.un
+        return rsa.getMap()
+
+    }
+
+    def aESpart(ByteArrayOutputStream baos, String path, String[] arra, String key){
+
+        byte[] k=new byte[16];
+        try
+        {
+//                k=AES.keygeneration();
+            // println(params)
+
+            //String text = "rojina";
+            MessageDigest msg = MessageDigest.getInstance("MD5");
+
+            msg.update(key.getBytes(), 0, key.length());
+            String digest1 = new BigInteger(1, msg.digest()).toString(16);
+//            System.out.println("MD5: " + digest1.length());
+//            System.out.println("MD5: " + digest1);
+
+//            System.out.println("MD5: " + digest1.substring(0, 16));
+            k=digest1.substring(0, 16).bytes;
+        }
+        catch (Exception e){
+            println "Problem in keyGeneration!!!!!!!!";
+        }
+
+        byte[] b = baos.toByteArray();
+        byte[] b2 = new byte[b.length-620];
+        byte[] b1 = new byte[0];
+
+        for(int i=0; i<(b2.length); i++)
+            b2[i]=b[i+620];
+
+        b2=AES.encrypt(b2,k,10)
+        b1=new byte[b2.length+620];
+        for(int i=0; i<b1.length; i++) {
+            if(i<620) b1[i]=b[i];
+            else b1[i]=b2[i-620]; }
+
+        File inputFile
+//        if (f.originalFilename.indexOf(".") > 0)
+//            name = f.originalFilename.substring(0, f.originalFilename.lastIndexOf("."));
+        inputFile=new File(path+"Encrypted.jpg");
+        FileOutputStream fos = new FileOutputStream(inputFile);
+        fos.write(b1);
+        fos.flush();
+        fos.close();
+
+
+
+        for(int i=0; i<b2.length; i++)
+            b2[i]=b1[i+620];
+
+        b2=AES.decrypt(b2,k,10)
+        for(int i=0; i<b.length; i++) {
+            if(i<620) b[i]=b1[i];
+            else b[i]=b2[i-620]; }
+
+        inputFile=new File(path+"Decrypted.jpg");
+        fos = new FileOutputStream(inputFile);
+        fos.write(b);
+        fos.flush();
+        fos.close();
+
+
+        println "path =============== $path"
+        AES_Modifier.getCorrelations(arra, path);
+        return AES_Modifier.getMap()
+
     }
 }

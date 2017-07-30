@@ -21,31 +21,31 @@
         <div class="login-page col-lg-6" style="text-align: -webkit-center;" >
             <h2>AES</h2>
             <label >Original</label><br>
-            <img src="${resource(dir:"images", file: "ag.jpg") }"><br>
+            <img src="../${original_photo}"><br>
             <label >Encrypted</label><br>
-            <img src="${resource(dir:"images", file: "ag.jpg") }"><br>
+            <img src="${resource(dir:"images", file: "AES-Algorithm-Encrypted.jpg") }"><br>
             <label >Decrypted</label><br>
-            <img src="${resource(dir:"images", file: "ag.jpg") }"><br>
+            <img src="${resource(dir:"images", file: "AES-Algorithm-Decrypted.jpg") }"><br>
             <br>
             <label >NPCR</label><br>
-            <input type="text" value="123" readonly><br>
+            <input type="text" value="${aes_map.getAt("aes_npr")}" readonly><br>
             <label >Correlation Coefficient</label><br>
-            <input type="text" value="123" readonly>
+            <input type="text" value="${aes_map.getAt("aes_correlation")}" readonly>
 
         </div>
         <div class="login-page col-lg-6" style="text-align: -webkit-center;" >
             <h2>RSA</h2>
             <label >Original</label><br>
-            <img src="${resource(dir:"images", file: "ag.jpg") }"><br>
+            <img src="../photo.jpg"><br>
             <label >Encrypted</label><br>
-            <img src="${resource(dir:"images", file: "ag.jpg") }"><br>
+            <img src="${resource(dir:"images", file: "RSA-Algorithm-Encrypted") }"><br>
             <label >Decrypted</label><br>
-            <img src="${resource(dir:"images", file: "ag.jpg") }"><br>
+            <img src="${resource(dir:"images", file: "RSA-Algorithm-Decrypted") }"><br>
             <br>
             <label >NPCR</label><br>
-            <input type="text" value="123" readonly><br>
+            <input type="text" value="${rsa_map.getAt("rsa_npr")}" readonly><br>
             <label >Correlation Coefficient</label><br>
-            <input type="text" value="123" readonly>
+            <input type="text" value="${rsa_map.getAt("rsa_correlation")}" readonly>
             <br>
             <br>
 
