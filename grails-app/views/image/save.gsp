@@ -11,7 +11,7 @@
         <g:link class="btn btn-default pull-right" style="margin-right: 10%;"  controller="encryption" action="renderFinalView">Home</g:link>
 </div>
 
-<div class="container-fluid">
+<div class="container">
 
     <div class="login-page"    style="text-align: -webkit-center;" >
         <div class="col-lg-12">
@@ -20,7 +20,12 @@
 
         <div class="login-page col-lg-6" style="text-align: -webkit-center;" >
             <h2>AES</h2>
-            <g:img dir="images" file="ag.jpg" />
+            <label >Original</label><br>
+            <img src="${resource(dir:"images", file: "ag.jpg") }"><br>
+            <label >Encrypted</label><br>
+            <img src="${resource(dir:"images", file: "ag.jpg") }"><br>
+            <label >Decrypted</label><br>
+            <img src="${resource(dir:"images", file: "ag.jpg") }"><br>
             <br>
             <label >NPCR</label><br>
             <input type="text" value="123" readonly><br>
@@ -30,12 +35,19 @@
         </div>
         <div class="login-page col-lg-6" style="text-align: -webkit-center;" >
             <h2>RSA</h2>
-            <img src="${resource(dir:"images", file: "ag.jpg") }">
+            <label >Original</label><br>
+            <img src="${resource(dir:"images", file: "ag.jpg") }"><br>
+            <label >Encrypted</label><br>
+            <img src="${resource(dir:"images", file: "ag.jpg") }"><br>
+            <label >Decrypted</label><br>
+            <img src="${resource(dir:"images", file: "ag.jpg") }"><br>
             <br>
             <label >NPCR</label><br>
-            <input type="text" value="123" disabled><br>
+            <input type="text" value="123" readonly><br>
             <label >Correlation Coefficient</label><br>
-            <input type="text" value="123" disabled>
+            <input type="text" value="123" readonly>
+            <br>
+            <br>
 
         </div>
 
