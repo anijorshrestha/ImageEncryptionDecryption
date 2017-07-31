@@ -112,7 +112,7 @@ class ImageController {
 
         ////////////////////////////////////////    Decryption  //////////////////////////////////////////////
 
-        def decrypted_BigInt = rsa.decrypt();
+        def decrypted_BigInt = rsa.decrypt(arra,height*width);
 
 //            encrypted_BigInt.un
         return rsa.getMap()
@@ -142,6 +142,7 @@ class ImageController {
             println "Problem in keyGeneration!!!!!!!!";
         }
 
+        long lStartTime = System.nanoTime();
         byte[] b = baos.toByteArray();
         byte[] b2 = new byte[b.length-620];
         byte[] b1 = new byte[0];
@@ -179,11 +180,17 @@ class ImageController {
         fos.write(b);
         fos.flush();
         fos.close();
+        long lEndTime = System.nanoTime();
+
+        //time elapsed
+        long output = lEndTime - lStartTime;
 
 
-        println "path =============== $path"
+        println "$output =================== path =============== $path"
         AES_Modifier.getCorrelations(arra, path);
-        return AES_Modifier.getMap()
+        Map<String, Double> resultMap = AES_Modifier.getMap()
+        resultMap.put("aes_encryption_time", Double.parseDouble(String.valueOf(output)));
+        return resultMap
 
     }
 }

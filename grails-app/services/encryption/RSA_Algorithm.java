@@ -40,8 +40,8 @@ public class RSA_Algorithm
     private  static int[] encrypted_integer_array;
     private  static int[] encrypted_integer_arrayUaci;
     private  static int[] decrypted_integer_array;
-    double ri,nr=0,dr_1=0,dr_2=0,dr_3=0,dr=0;
-    double xx[],xy[],yy[];
+    private static  long lStartTime;
+    private static  long lEndTime;
     String path;
 
     public void setArray(){
@@ -84,12 +84,12 @@ public class RSA_Algorithm
 
 
     public int[] encrypt(String[] message, int arrayLength) throws IOException{
+        lStartTime = System.nanoTime();
         for (int i = 0; i <arrayLength ; i++) {
             BigInteger bigInteger=new BigInteger(message[i]);
             array[i]=bigInteger.modPow(e, N);
             encrypted_integer_array[i] = array[i].intValue();
         }
-        getCorrelations(arrayLength, message);
         writeImageInFolder(encrypted_integer_array,"Encrypted");
         return encrypted_integer_array;
     }
@@ -172,14 +172,21 @@ public class RSA_Algorithm
         return Double.valueOf(npr);
     }
 
-    public int[] decrypt() throws IOException{
-        darray = new BigInteger[250000];
+    public int[] decrypt(int arrayLength, String[] message) throws IOException{
 
         for (int i = 0; i <array.length ; i++) {
             darray[i]=array[i].modPow(d, N);
             decrypted_integer_array[i] = darray[i].intValue();
         }
         writeImageInFolder(decrypted_integer_array, "Decrypted");
+
+        lEndTime = System.nanoTime();
+        long output = lEndTime - lStartTime;
+
+        resultMap.put("rsa_encryption_time", Double.parseDouble(String.valueOf(output)));
+
+        getCorrelations(arrayLength, message);
+
         return decrypted_integer_array;
     }
 

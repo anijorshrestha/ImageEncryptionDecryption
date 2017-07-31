@@ -31,6 +31,8 @@
             <input type="text" value="${aes_map.getAt("aes_npr")}" readonly><br>
             <label >Correlation Coefficient</label><br>
             <input type="text" value="${aes_map.getAt("aes_correlation")}" readonly>
+            <label >Encryption Time</label><br>
+            <input type="text" value="${aes_map.getAt("aes_encryption_time")}" readonly>
 
         </div>
         <div class="login-page col-lg-6" style="text-align: -webkit-center;" >
@@ -46,6 +48,8 @@
             <input type="text" value="${rsa_map.getAt("rsa_npr")}" readonly><br>
             <label >Correlation Coefficient</label><br>
             <input type="text" value="${rsa_map.getAt("rsa_correlation")}" readonly>
+            <label >Encryption Time</label><br>
+            <input type="text" value="${rsa_map.getAt("rsa_encryption_time")}" readonly>
             <br>
             <br>
 
