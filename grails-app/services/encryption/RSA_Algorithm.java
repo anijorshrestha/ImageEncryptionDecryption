@@ -91,6 +91,10 @@ public class RSA_Algorithm
             encrypted_integer_array[i] = array[i].intValue();
         }
         writeImageInFolder(encrypted_integer_array,"Encrypted");
+        lEndTime = System.nanoTime();
+        long output = lEndTime - lStartTime;
+
+        resultMap.put("rsa_encryption_time", Double.parseDouble(String.valueOf(output)));
         return encrypted_integer_array;
     }
 //
@@ -173,6 +177,7 @@ public class RSA_Algorithm
     }
 
     public int[] decrypt(int arrayLength, String[] message) throws IOException{
+        lStartTime = System.nanoTime();
 
         for (int i = 0; i <array.length ; i++) {
             darray[i]=array[i].modPow(d, N);
@@ -183,7 +188,7 @@ public class RSA_Algorithm
         lEndTime = System.nanoTime();
         long output = lEndTime - lStartTime;
 
-        resultMap.put("rsa_encryption_time", Double.parseDouble(String.valueOf(output)));
+        resultMap.put("rsa_decryption_time", Double.parseDouble(String.valueOf(output)));
 
         getCorrelations(arrayLength, message);
 

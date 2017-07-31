@@ -33,6 +33,8 @@
             <input type="text" value="${aes_map.getAt("aes_correlation")}" readonly>
             <label >Encryption Time</label><br>
             <input type="text" value="${aes_map.getAt("aes_encryption_time")}" readonly>
+            <label >Decryption Time</label><br>
+            <input type="text" value="${aes_map.getAt("aes_decryption_time")}" readonly>
 
         </div>
         <div class="login-page col-lg-6" style="text-align: -webkit-center;" >
@@ -50,6 +52,8 @@
             <input type="text" value="${rsa_map.getAt("rsa_correlation")}" readonly>
             <label >Encryption Time</label><br>
             <input type="text" value="${rsa_map.getAt("rsa_encryption_time")}" readonly>
+            <label >Decryption Time</label><br>
+            <input type="text" value="${rsa_map.getAt("rsa_decryption_time")}" readonly>
             <br>
             <br>
 

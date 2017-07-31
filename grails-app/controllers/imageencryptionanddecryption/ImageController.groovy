@@ -164,8 +164,12 @@ class ImageController {
         fos.write(b1);
         fos.flush();
         fos.close();
+        long lEndTime = System.nanoTime();
+        long output = lEndTime - lStartTime;
 
+        ////////////////---Decrypt/////////////////////////////////
 
+        lStartTime = System.nanoTime();
 
         for(int i=0; i<b2.length; i++)
             b2[i]=b1[i+620];
@@ -180,16 +184,17 @@ class ImageController {
         fos.write(b);
         fos.flush();
         fos.close();
-        long lEndTime = System.nanoTime();
 
+        lEndTime = System.nanoTime();
         //time elapsed
-        long output = lEndTime - lStartTime;
+        long output_decrypt = lEndTime - lStartTime;
 
 
         println "$output =================== path =============== $path"
         AES_Modifier.getCorrelations(arra, path);
         Map<String, Double> resultMap = AES_Modifier.getMap()
         resultMap.put("aes_encryption_time", Double.parseDouble(String.valueOf(output)));
+        resultMap.put("aes_decryption_time", Double.parseDouble(String.valueOf(output_decrypt)));
         return resultMap
 
     }
