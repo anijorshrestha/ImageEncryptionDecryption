@@ -21,7 +21,7 @@
         <div class="login-page col-lg-6" style="text-align: -webkit-center;" >
             <h2>AES</h2>
             <label >Original</label><br>
-            <img src="../${original_photo}"><br>
+            <img src="${resource(dir:"images", file: "$original_photo") }"><br>
             <label >Encrypted</label><br>
             <img src="${resource(dir:"images", file: "AES-Algorithm-Encrypted.jpg") }"><br>
             <label >Decrypted</label><br>
@@ -40,7 +40,7 @@
         <div class="login-page col-lg-6" style="text-align: -webkit-center;" >
             <h2>RSA</h2>
             <label >Original</label><br>
-            <img src="../photo.jpg"><br>
+            <img src="${resource(dir:"images", file: "$original_photo") }"><br>
             <label >Encrypted</label><br>
             <img src="${resource(dir:"images", file: "RSA-Algorithm-Encrypted") }"><br>
             <label >Decrypted</label><br>

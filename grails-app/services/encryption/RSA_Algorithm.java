@@ -2,6 +2,7 @@ package encryption;
 
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -84,15 +85,16 @@ public class RSA_Algorithm
 
 
     public int[] encrypt(String[] message, int arrayLength) throws IOException{
-        lStartTime = System.nanoTime();
+        lStartTime = System.currentTimeMillis();
         for (int i = 0; i <arrayLength ; i++) {
             BigInteger bigInteger=new BigInteger(message[i]);
             array[i]=bigInteger.modPow(e, N);
             encrypted_integer_array[i] = array[i].intValue();
         }
         writeImageInFolder(encrypted_integer_array,"Encrypted");
-        lEndTime = System.nanoTime();
-        long output = lEndTime - lStartTime;
+        lEndTime = System.currentTimeMillis();
+        long output = (lEndTime - lStartTime);
+//        long output = (lEndTime - lStartTime)/1000000000;
 
         resultMap.put("rsa_encryption_time", Double.parseDouble(String.valueOf(output)));
         return encrypted_integer_array;
@@ -159,7 +161,7 @@ public class RSA_Algorithm
 
     private Double getCorrelation(double nr, double dr){
         double r=(nr/dr);
-        String s = String.format("%.2f",r);
+        String s = String.format("%.5f",r);
         r = Double.parseDouble(s);
         return Double.valueOf(r);
     }
@@ -177,7 +179,7 @@ public class RSA_Algorithm
     }
 
     public int[] decrypt(int arrayLength, String[] message) throws IOException{
-        lStartTime = System.nanoTime();
+        lStartTime = System.currentTimeMillis();
 
         for (int i = 0; i <array.length ; i++) {
             darray[i]=array[i].modPow(d, N);
@@ -185,8 +187,9 @@ public class RSA_Algorithm
         }
         writeImageInFolder(decrypted_integer_array, "Decrypted");
 
-        lEndTime = System.nanoTime();
-        long output = lEndTime - lStartTime;
+        lEndTime = System.currentTimeMillis();
+        long output = (lEndTime - lStartTime);
+//        long output = (lEndTime - lStartTime)/1000000000;
 
         resultMap.put("rsa_decryption_time", Double.parseDouble(String.valueOf(output)));
 
@@ -206,6 +209,9 @@ public class RSA_Algorithm
 //                rgb /= 3;
 //                System.out.println(inputArray[i++] + " ==== rgb = " + rgb);
 //                System.out.println(inputArray[i] + " ==== rgb = " + rgb);
+
+//                Color c = new Color(255-inputArray[i],255-inputArray[i],255-inputArray[i]);
+//                img.setRGB(x,y,c.getRGB());
                 img.setRGB(x, y, rgb);
                 i++;
 //                img.setRGB(x, y, inputArray[i++]);

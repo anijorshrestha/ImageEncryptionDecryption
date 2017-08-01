@@ -8,6 +8,7 @@ import grails.util.Holders
 import org.apache.commons.io.FilenameUtils
 
 import javax.imageio.ImageIO
+import java.awt.Color
 import java.awt.image.BufferedImage
 import java.security.MessageDigest
 
@@ -23,9 +24,8 @@ class ImageController {
     }
     def savePhotoToDisk(def f, String user_key)
     {
-        String photoPath = "C:/Users/Sushant/Desktop/encryptionandde/"
         Constants constants = new Constants();
-        constants.PHOTOS_DIR = Holders.getGrailsApplication().getMainContext().getResource("/").getFile().getAbsolutePath();
+        constants.PHOTOS_DIR = Holders.getGrailsApplication().getMainContext().getResource("/").getFile().getAbsolutePath()+"/images/";
         def okContentTypes = ['image/png', 'image/jpeg', 'image/jpg']
         if (f.empty) {
             flash.message = 'file cannot be empty'
@@ -35,17 +35,34 @@ class ImageController {
             flash.message = "Image must be one of: $okContentTypes"
             return
         }
-        def extension = FilenameUtils.getExtension(f.originalFilename)
         def serverImagesDir = new File(encryption.Constants.PHOTOS_DIR)
-        String image_path = serverImagesDir.absolutePath + "\\" + f.originalFilename
+        String image_path = serverImagesDir.absolutePath + "/" + f.originalFilename
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+        File file = new File("/home/rojina/Desktop/imageAES_RSA/ImageEncryptionDecryption/web-app/images/");
+
+        String[] myFiles;
+        if (file.isDirectory()) {
+            myFiles = file.list();
+            for (int i = 0; i < myFiles.length; i++) {
+                File myFile = new File(file, myFiles[i]);
+                System.out.println(myFile);
+                if (!myFile.isDirectory()) {
+                    myFile.delete();
+                }
+            }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////
+
+
         if (serverImagesDir.exists()) {
             File destinationFile = new File(serverImagesDir, f.originalFilename)
             f.transferTo(destinationFile)
 
-
             ///////////////////////////////////   Reading Image   //////////////////////////////////////////////////
             BufferedImage image = ImageIO.read(new File(image_path));
-            String path = serverImagesDir.absolutePath +"\\images\\"
+            String path = serverImagesDir.absolutePath +"/"
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(image, "jpg", baos);
             int width = image.getWidth();
@@ -66,7 +83,6 @@ class ImageController {
 //                    pixel[i][j] = (r + g + b) / 3;
                 }
             }
-            println(pixel.length);
             int array_size = height * width;
             int[] single_array = new int[array_size];
             int position = 0;
@@ -79,20 +95,17 @@ class ImageController {
             for (int i = 0; i < single_array.length; i++) {
                 arra[i] = String.valueOf(single_array[i]);
             }
-            rsa_map = rsaPart(arra, height, width, path)
-            println "user_key ======================== $user_key"
             aes_map = aESpart(baos,path+"AES-Algorithm-", arra, user_key)
-
             println "aes_correlation ==== " + aes_map.get("aes_correlation")
             println " aes_npr ==== " + aes_map.get("aes_npr")
+            rsa_map = rsaPart(arra, height, width, path)
+
             println " rsa_correlation ==== " + rsa_map.get("rsa_correlation")
             println "rsa_npr ==== " + rsa_map.get("rsa_npr")
 //            double uaci = AES_Modifier.getCorrelation(path)
 //            println "uaci ====================================== $uaci"
-
         }
-        String original_photoPath = photoPath+extension
-        render(view: "save", model: [aes_map: aes_map, rsa_map: rsa_map, original_photo:extension])
+        render(view: "save", model: [aes_map: aes_map, rsa_map: rsa_map, original_photo:(f.originalFilename)])
     }
 
     def rsaPart(String[] arra, int height, int width, String path){
@@ -110,9 +123,9 @@ class ImageController {
         //////////////////////////////////////////////   Encryption     ///////////////////////////////////////////////
         def encrypted_BigInt = rsa.encrypt(arra,height*width);
 
-        ////////////////////////////////////////    Decryption  //////////////////////////////////////////////
+        ////////////////////////////////////////    Decrypweb-apption  //////////////////////////////////////////////
 
-        def decrypted_BigInt = rsa.decrypt(arra,height*width);
+        def decrypted_BigInt = rsa.decrypt(height*width,arra);
 
 //            encrypted_BigInt.un
         return rsa.getMap()
@@ -142,7 +155,7 @@ class ImageController {
             println "Problem in keyGeneration!!!!!!!!";
         }
 
-        long lStartTime = System.nanoTime();
+        long lStartTime = System.currentTimeMillis();
         byte[] b = baos.toByteArray();
         byte[] b2 = new byte[b.length-620];
         byte[] b1 = new byte[0];
@@ -151,6 +164,7 @@ class ImageController {
             b2[i]=b[i+620];
 
         b2=AES.encrypt(b2,k,10)
+        long lEndTime = System.currentTimeMillis();
         b1=new byte[b2.length+620];
         for(int i=0; i<b1.length; i++) {
             if(i<620) b1[i]=b[i];
@@ -164,17 +178,17 @@ class ImageController {
         fos.write(b1);
         fos.flush();
         fos.close();
-        long lEndTime = System.nanoTime();
-        long output = lEndTime - lStartTime;
+        long output = (lEndTime - lStartTime);
 
         ////////////////---Decrypt/////////////////////////////////
 
-        lStartTime = System.nanoTime();
+        lStartTime = System.currentTimeMillis()
 
         for(int i=0; i<b2.length; i++)
             b2[i]=b1[i+620];
 
         b2=AES.decrypt(b2,k,10)
+        lEndTime = System.currentTimeMillis();
         for(int i=0; i<b.length; i++) {
             if(i<620) b[i]=b1[i];
             else b[i]=b2[i-620]; }
@@ -185,12 +199,11 @@ class ImageController {
         fos.flush();
         fos.close();
 
-        lEndTime = System.nanoTime();
         //time elapsed
-        long output_decrypt = lEndTime - lStartTime;
+        long output_decrypt = (lEndTime - lStartTime);
 
 
-        println "$output =================== path =============== $path"
+        path = path + "Encrypted.jpg"
         AES_Modifier.getCorrelations(arra, path);
         Map<String, Double> resultMap = AES_Modifier.getMap()
         resultMap.put("aes_encryption_time", Double.parseDouble(String.valueOf(output)));
