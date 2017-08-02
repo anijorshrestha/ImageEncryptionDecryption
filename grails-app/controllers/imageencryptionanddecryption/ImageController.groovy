@@ -170,8 +170,6 @@ class ImageController {
             if(i<620) b1[i]=b[i];
             else b1[i]=b2[i-620]; }
 
-        
-
 
         File inputFile
 
