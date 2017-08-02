@@ -1,11 +1,16 @@
 package encryption;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReadParam;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -21,12 +26,26 @@ public class AES_Modifier {
     public AES_Modifier(int height, int width){
 
     }
-    public static void getCorrelations(String[] original_values, String path){
-        BufferedImage img  = null;
+    public static void getCorrelations(String[] original_values, String path) throws IOException {
+        File file = new File(path);
+
+        ImageInputStream input = ImageIO.createImageInputStream(file); // TODO: null check
+        Iterator<ImageReader> readers = ImageIO.getImageReaders(input); // TODO: hasNext check
+        ImageReader reader = readers.next();
+        reader.setInput(input);
+
+// This is the important part, get or create a ReadParam,
+// create a destination image to hold the decoded result,
+// then pass that image with the param.
+        ImageReadParam param = reader.getDefaultReadParam();
+        BufferedImage img = reader.getImageTypes(0).next().createBufferedImage(reader.getWidth(0), reader.getHeight(0));
+        param.setDestination(img);
+
         try {
-            img = ImageIO.read(new File(path + "Encrypted.jpg"));
-        } catch (IOException e) {
-            System.out.print("=====================================" + "C:\\Users\\Sushant\\Desktop\\encryptionandde\\AES-Algorithm-Encrypted.jpg");
+            img = reader.read(0, param); // Don't really need the return value here, as it will always be same value as "image"
+        }
+        catch (IOException e) {
+            // Ignore this exception or display a warning or similar, for exceptions happening during decoding
             e.printStackTrace();
         }
         int widths = img.getWidth();
@@ -94,7 +113,7 @@ public class AES_Modifier {
 
     private static Double getCorrelation(double nr, double dr){
         double r=(nr/dr);
-        String s = String.format("%.2f",r);
+        String s = String.format("%.5f",r);
         r = Double.parseDouble(s);
         return Double.valueOf(r);
     }
