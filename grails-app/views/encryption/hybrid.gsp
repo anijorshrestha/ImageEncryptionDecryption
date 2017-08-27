@@ -14,38 +14,31 @@
     <script src="${resource(dir: 'js',file: 'jquery.js')}" type="text/javascript"></script>
     <script>
         function encryptImage(){
-            var photo1 = $('#photo1').val();
-            var user_key1 = $('#user_key').val();
+            var keytobeEncrypted = $('#encryptionkey').val();
+
             var data = {
-                photo : photo1 ,
-                user_key: user_key1
+                key : keytobeEncrypted
             }
             $.ajax({
-                url : '${createLink(controller: 'encrypt', action: 'save')}',
+                url : '${createLink(controller: 'decrypt', action: 'RSAkeyencryption')}',
                 type : 'POST',
                 data : data,
                 success: function(resp){
-                    if(resp == true || resp == "true"){
-                        alert("Encryption Done!!!")
-                    }
+                    $('#keyafterenc').val(resp);
                 }
             })
         }
         function decryptImage(){
-            var photo1 = $('#photo1').val();
-            var user_key1 = $('#user_key').val();
+            var decrypt = $('#decryptvalue').val();
             var data = {
-                photo : photo1 ,
-                user_key: user_key1
+                user_key: decrypt
             }
             $.ajax({
-                url : '${createLink(controller: 'decrypt', action: 'save')}',
+                url : '${createLink(controller: 'decrypt', action: 'RSAkeydecryption')}',
                 type : 'POST',
                 data : data,
                 success: function(resp){
-                    if(resp == true || resp == "true"){
-                        alert("Decryption Done!!!")
-                    }
+                    $('#keyafterdec').val(resp);
                 }
             })
         }
@@ -61,7 +54,7 @@
     <div class="panel panel-danger">
         <div class="panel-heading">AES for image encryption</div>
         <div class="panel-body">
-            <g:form controller="encrypt" action="save" enctype="multipart/form-data">
+            <g:form controller="decrypt" enctype="multipart/form-data">
                 <div>
                     <table>
                         <tr>
@@ -127,7 +120,7 @@
                         <tbody>
                         <tr>
                             <td>
-                                <g:form controller="encrypt" action="save" enctype="multipart/form-data">
+
                                     <div>
                                         <table>
                                             <tr>
@@ -138,7 +131,7 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <input type="text"  name="text"  id="text"/>
+                                                    <input type="text"  name="text"  id="encryptionkey"/>
                                                 </td>
 
 
@@ -151,14 +144,14 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <input type="text"  name="user_key" />
+                                                    <input type="text"  name="user_key" id ="keyafterenc"/>
                                                 </td>
 
 
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <button>Encrypt</button>
+                                                    <button onclick="encryptImage()">Encrypt</button>
                                                 </td>
 
                                             </tr>
@@ -168,11 +161,11 @@
 
                                     </div>
 
-                                </g:form>
+
 
                             </td>
                             <td>
-                                <g:form controller="decrypt" action="save" enctype="multipart/form-data">
+
                                     <div>
                                         <table>
                                             <tr>
@@ -183,7 +176,7 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <input type="text"  name="text"  id="text"/>
+                                                    <input type="text"  name="text"  id="decryptvalue"/>
                                                 </td>
 
 
@@ -196,7 +189,7 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <input type="text"  name="user_key" />
+                                                    <input type="text"  name="user_key" id = "keyafterdec"/>
                                                 </td>
 
 
@@ -204,7 +197,7 @@
                                             <tr>
 
                                                 <td>
-                                                    <button>Decrypt</button>
+                                                    <button onclick="decryptImage()">Decrypt</button>
 
                                                 </td>
 
@@ -215,7 +208,7 @@
 
                                     </div>
 
-                                </g:form>
+
                             </td>
                         </tr>
                         </tbody>
