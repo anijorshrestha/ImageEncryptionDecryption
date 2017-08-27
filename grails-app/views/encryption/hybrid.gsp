@@ -94,13 +94,10 @@
 
                         </tr>
                         <tr>
-                            <td>
-                                <button onclick="encryptImage()">Encrypt</button>
-                            </td>
-                            <td>
-                                <button onclick="decryptImage()">Decrypt</button>
+                            <td><g:actionSubmit class="btn btn-danger" value="Encrypt" action="save"/></td>
 
-                            </td>
+
+                            <td> <g:actionSubmit class="btn btn-danger" value="Decrypt" action="saveD"/></td>
 
                         </tr>
                     </table>
